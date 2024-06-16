@@ -1,9 +1,16 @@
 import express from 'express';
-const app= express();
-app.use (express.json ());
-app.use (express.urlencoded ({extended:true}));
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./src/public'))
+import productRouter from './routes/product.router.js'
 
-const PUERTO= 8080;
-app.listen (PUERTO, ()=> { console.log(`Escuchando el puerto ${PUERTO}`);})
+import config from './config/config.js';
+import './database.js'
+const { port } = config
 
+//Routes
+app.use("/api/products", productRouter)
+
+//Listen
+app.listen(port)
