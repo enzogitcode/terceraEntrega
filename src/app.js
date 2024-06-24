@@ -9,8 +9,16 @@ import config from './config/config.js';
 import './database.js'
 const { port } = config
 
+
+
 //Routes
 app.use("/api/products", productRouter)
+
+//Views
+import exphbs from 'express-handlebars'
+app.engine('handlebars', exphbs.engine());
+app.set('view engine', 'handlebars');
+app.set('views', './src/views');
 
 //Listen
 app.listen(port)

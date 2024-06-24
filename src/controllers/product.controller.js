@@ -1,84 +1,57 @@
-import ProductModel from '../models/product.model.js';
-const productModel = new ProductModel;
-import paginate from 'mongoose-paginate-v2'
+import ProductRepository from "../repository/product.repository.js"
+const productRepository = new ProductRepository()
 class ProductController {
-    //getProducts
     async getProducts(req, res) {
-        let { limit, page, query, sort } = req.query
         try {
-            const sortOption = {}
-            if (sort !== 0) {
-                sortOption.price = sort;
-            }
-
-            const products = await ProductModel.paginate({}, { limit, page })
-
-            const productsFinal = products.docs.map(product => {
-                const { _id, ...rest } = product.toObject();
-                return rest;
-            })
-
-            res.render("index", {
-                payload: productsFinal,
-                products: productsFinal,
-                hasPrevPage: products.hasPrevPage,
-                hasNextPage: products.hasNextPage,
-                prevPage: products.prevPage,
-                nextPage: products.nextPage,
-                currentPage: products.page,
-                totalPages: products.totalPages,
-                prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
-                nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
-            })
-
-            console.log(products)
-            console.log(productsFinal)
-
+            let { limit = 10, page = 1, sort, query } = req.query;
+            const products = await productRepository.getProducts(limit, page, sort, query);
+            res.json(products);
 
         } catch (error) {
-            res.status(500).json({ message: error.message })
+            res.json(error)
         }
+
     }
+    //getProductById funciona No Tocar
     async getProductById(req, res) {
-        let idProduct = req.params.pid
+        let productId = req.params.pid
         try {
-            const productById = await ProductModel.find(idProduct).lean()
-            res.json(productById)
-
+            const product = await productRepository.getProductById(productId)
+            res.json(product)
         } catch (error) {
-            res.status(500).json({ message: error.message })
-        }
-
-    }
-    //addProduct
-    async addProducts(req, res) {
-        let newProduct = req.body
-        try {
-            let product = await new productModel(newProduct)
-            await product.save();
-            res.send(product)
-            res.status(201).json("Producto agregado con éxito", product)
-        } catch (error) {
-            res.status(500).json({ message: error.message })
+            res.json(error)
         }
     }
-    async updateProductById() {
-        let idProduct = req.params.pid
+    async addProduct(req, res) {
+        const newProduct = req.body
         try {
-
+            const product = await productRepository.addProduct(newProduct)
+            res.json(product)
+            
         } catch (error) {
-
+            res.json(error)
+            console.log(error)
+        }
+    }
+    async updateProductById(req, res) {
+        try {
+            let productId = req.params.pid
+            let newDataProduct = req.body
+            const updatedProduct = await productRepository.updateProduct(productId, newDataProduct)
+            res.json(updatedProduct)
+        } catch (error) {
+            console.log(error)
+            res.json(error)
         }
     }
     async deleteProductById(req, res) {
-        let idProduct = req.params.pid
+        let productId = req.params.pid
         try {
-
+            const deletedProduct = await productRepository.deleteProductById(productId)
+            res.json(deletedProduct)
         } catch (error) {
-
+            res.json(error)
         }
-
     }
-
 }
 export default ProductController
