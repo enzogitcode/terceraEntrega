@@ -2,17 +2,15 @@ import ProductModel from '../models/product.model.js'
 
 class ProductRepository {
     async getProducts() {
-        const { limit = 10, page = 1, query, sort } = req.query
         try {
             const products = await ProductModel.find()
-            const productsFinal = products.docs.map(product => {
+            const productsFinal = products.map(product => {
                 const { _id, ...rest } = product.toObject();
                 return rest;
             })
-            res.json(productsFinal)
-
+            return productsFinal
+            
         } catch (error) {
-            res.status(500).json({ message: error })
             console.log(error)
         }
     }

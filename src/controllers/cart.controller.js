@@ -1,2 +1,3 @@
-import CartModel from "../models/cart.model.js"
-const newCart= new CartModel()
+import { CartController } from "../repository/cart.repository";
+
+

@@ -3,16 +3,15 @@ const productRepository = new ProductRepository()
 class ProductController {
     async getProducts(req, res) {
         try {
-            let { limit = 10, page = 1, sort, query } = req.query;
-            const products = await productRepository.getProducts(limit, page, sort, query);
+            const products = await productRepository.getProducts();
             res.json(products);
 
         } catch (error) {
             res.json(error)
+            console.log(error)
         }
 
     }
-    //getProductById funciona No Tocar
     async getProductById(req, res) {
         let productId = req.params.pid
         try {
