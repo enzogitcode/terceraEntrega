@@ -1,6 +1,6 @@
-import CartModel from "../models/cart.model";
+import CartModel from "../models/cart.model.js";
 
-export class CartController {
+export class CartRepository {
     async createCart() {
         try {
             const newCart = new CartModel({ products: [] });
@@ -11,13 +11,11 @@ export class CartController {
             throw error;
         }
     }
-    async getCartById() {
-        let cartId = req.params.cid
+    async getCartById(id) {
         try {
-            const cart = await CartModel.findById(cartId)
+            const cart = await CartModel.findById(id)
             if (!cart) {
                 console.log("carrito no encontrado")
-
             }
             return cart
 
@@ -64,14 +62,36 @@ export class CartController {
         }
     }
 
-    async updateProductQuantity() {
+    async updateProductQuantity(cartId, productId, newQuantity) {
+        try {
+            const cart = await CartModel.findById(cartId);
 
-    }
-    async updateProductQuantity() {
+            if (!cart) {
+
+                throw new Error('Carrito no encontrado');
+            }
+
+
+            const productIndex = cart.products.findIndex(item => item._id.toString() === productId);
+
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity = newQuantity;
+
+                cart.markModified('products');
+
+                await cart.save();
+                return cart;
+            } else {
+                throw new Error('Producto no encontrado en el carrito');
+            }
+
+        } catch (error) {
+            throw new Error("Error al actualizar las cantidades");
+        }
 
     }
     async deleteCart() { }
-    async cleanCart() {
+    async clearCart() {
 
     }
 

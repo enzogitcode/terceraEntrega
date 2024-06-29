@@ -4,6 +4,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./src/public'))
 import productRouter from './routes/product.router.js'
+import cartRouter from './routes/cart.router.js'
 
 import config from './config/config.js';
 import './database.js'
@@ -13,6 +14,7 @@ const { port } = config
 
 //Routes
 app.use("/api/products", productRouter)
+app.use("/api/carts", cartRouter)
 
 //Views
 import exphbs from 'express-handlebars'

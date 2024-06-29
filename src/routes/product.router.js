@@ -3,10 +3,7 @@ const router = express.Router()
 import ProductController from '../controllers/product.controller.js'
 const productController = new ProductController();
 
-//getProducts no trae los productos
 router.get("/", productController.getProducts)
-
-//Funcionan
 router.put("/:pid", productController.updateProductById)
 router.post ("/", productController.addProduct)
 router.get("/:pid", productController.getProductById)
