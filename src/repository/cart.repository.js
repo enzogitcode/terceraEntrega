@@ -1,4 +1,5 @@
 import CartModel from "../models/cart.model.js";
+import ProductModel from '../models/product.model.js'
 
 export class CartRepository {
     async createCart() {
@@ -90,9 +91,38 @@ export class CartRepository {
         }
 
     }
-    async deleteCart() { }
-    async clearCart() {
+    async deleteProduct(cartId, productId) {
+        try {
+            const cart = await CartModel.find(cartId);
+            if (!cart) {
+                throw new Error('Carrito no encontrado');
 
+            }
+            const productExist = await ProductModel.findById(productId)
+            if (productExist) {
+                cart.products.splice(productExist, 1)
+            }
+            else {
+                throw new Error('Producto no encontrado')
+            }
+
+            await cart.save()
+            return cart;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async clearCart(cartId) {
+        try {
+            const cart = await CartModel.findByIdAndDelete(cartId, { products: [] }, { new: true })
+            if (!cart) {
+                throw new Error("carrito no encontrado")
+            }
+            return cart;
+        } catch (error) {
+            console.log(error)
+
+        }
     }
 
 }

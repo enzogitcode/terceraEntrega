@@ -1,22 +1,26 @@
+import CartModel from "../models/cart.model.js";
 import { CartRepository } from "../repository/cart.repository.js";
 const cartRepository = new CartRepository()
 export class CartController {
-    async newCart() {
+    async newCart(req, res) {
         try {
-
+            const newCart = await cartRepository.createCart()
+            res.json( newCart)
+            console.log("Nuevo carrito creado")
         } catch (error) {
-
+            console.log("error al crear el carrito", error)
+            res.json(error)
         }
     }
     async addProducts() { }
-    async deleteProducts(req, res) {
+    async deleteProduct(req, res) {
         const cartId = req.params.cid
         const productId = req.params.pid
         try {
-            const cart = await cartRepository.getCartById(cartId)
-            
+            const cart = await cartRepository.getCartById(cartId, productId)
+            res.json(cart)
         } catch (error) {
-
+            console.log(error)
         }
 
     }
@@ -24,6 +28,9 @@ export class CartController {
         const cartId = req.params.cid
         try {
             const cart = await cartRepository.getCartById(cartId)
+            if (!cart) {
+                res.json("No existe un carrito con ese Id")
+            }
             res.json(cart)
         } catch (error) {
             console.log(error)
@@ -35,11 +42,15 @@ export class CartController {
     async clearCart(req, res) {
         const cartId = req.params.cid
         try {
-            const cart = await cartRepository.getCartById(cartId)
-
+            const cart = await cartRepository.clearCart(cartId)
+            if (!cart) {
+                res.json("No existe un carrito con ese Id")
+            }
+            res.json("carrito eliminado")
         } catch (error) {
-
+            console.log("no se pudo vaciar el carrito", error)
         }
+
     }
     async purchase() { }
 }
