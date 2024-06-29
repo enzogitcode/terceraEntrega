@@ -5,14 +5,26 @@ export class CartController {
     async newCart(req, res) {
         try {
             const newCart = await cartRepository.createCart()
-            res.json( newCart)
+            res.json(newCart)
             console.log("Nuevo carrito creado")
         } catch (error) {
             console.log("error al crear el carrito", error)
             res.json(error)
         }
     }
-    async addProducts() { }
+    async addProducts(req, res) {
+        const productId = req.params.pid
+        const cartId = req.params.cid
+        const quantity = req.body.quantity || 1
+        try {
+            const product = await cartRepository.addProducts(productId, cartId, quantity)
+            res.json(product)
+        } catch (error) {
+            console.log(error)
+            res.json(error)
+        }
+
+    }
     async deleteProduct(req, res) {
         const cartId = req.params.cid
         const productId = req.params.pid
