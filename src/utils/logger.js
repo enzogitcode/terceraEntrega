@@ -1,4 +1,6 @@
+import { configDotenv } from 'dotenv'
 import winston, { transports } from 'winston'
+const {node_env} =configDotenv
 
 const niveles = {
     nivel: {
@@ -18,8 +20,16 @@ const niveles = {
         debug: "white"
     }
 }
-const logger = winston.createLogger({
-    levels: niveles.nivel,
+const loggerDevelopment = winston.createLogger({
+    levels: niveles,
+    transports: [
+        new winston.transports.Console({
+            level: "debug"
+        })
+    ]
+})
+const loggerProduction = winston.createLogger({
+    levels: niveles,
     transports: [
         new winston.transports.Console({
             level: "http",
@@ -35,6 +45,7 @@ const logger = winston.createLogger({
 
     ]
 })
+const logger = node_env === "production" ? loggerProduction: loggerDevelopment;
 
 const addLogger = (req, res, next) => {
     req.logger = logger;
