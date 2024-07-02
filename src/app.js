@@ -23,6 +23,7 @@ app.get("/loggerTest", (req, res) => {
     req.logger.info("Mensaje INFO")
     req.logger.http("Mensaje HTTP")
     req.logger.debug("Mensaje Debug")
+    
     res.send("Logs generados")
 })
 //Views
