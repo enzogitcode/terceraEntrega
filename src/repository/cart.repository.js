@@ -1,7 +1,7 @@
 import CartModel from "../models/cart.model.js";
 import ProductModel from '../models/product.model.js'
 
-export class CartRepository {
+class CartRepository {
     async createCart() {
         try {
             const newCart = new CartModel({ products: [] });
@@ -12,9 +12,10 @@ export class CartRepository {
             throw error;
         }
     }
-    async getCartById(id) {
+    async getCartById(cartId) {
         try {
-            const cart = await CartModel.findById(id)
+            const cart = await CartModel.findById(cartId)
+            console.log(cart)
             if (!cart) {
                 console.log("carrito no encontrado")
             }
@@ -29,7 +30,9 @@ export class CartRepository {
     async addProducts(cartId, productId, quantity = 1) {
         try {
             const cart = await CartModel.findById(cartId);
-            const productExist = cart.products.find(item => item.product.toString() === productId);
+            console.log(cart)
+            const productExist = cart.products.find(item => item.product._id.toString() === productId);
+            console.log(productExist)
             if (productExist) {
                 productExist.quantity += quantity;
             } else {
@@ -44,7 +47,7 @@ export class CartRepository {
             throw error;
         }
     }
-    async updateCart(cartId, productId) {
+    async updateCart(cartId) {
         try {
             const cart = await CartModel.findById(cartId)
             if (!cart) {
@@ -124,3 +127,4 @@ export class CartRepository {
     }
 
 }
+export default CartRepository;

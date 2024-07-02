@@ -1,7 +1,7 @@
 import CartModel from "../models/cart.model.js";
-import { CartRepository } from "../repository/cart.repository.js";
+import CartRepository from "../repository/cart.repository.js";
 const cartRepository = new CartRepository()
-export class CartController {
+ class CartController {
     async newCart(req, res) {
         try {
             const newCart = await cartRepository.createCart()
@@ -66,3 +66,5 @@ export class CartController {
     }
     async purchase() { }
 }
+export default CartController
+
