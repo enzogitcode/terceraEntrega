@@ -1,6 +1,4 @@
-import express from 'express'
 import winston, { transports } from 'winston'
-
 
 const niveles = {
     nivel: {
@@ -29,6 +27,18 @@ const logger = winston.createLogger({
                 winston.format.colorize({ colors: niveles.colors }),
                 winston.format.simple()
             )
+        }),
+        new winston.transports.File({
+            filename: "./errors.log",
+            level: "info"
         })
+
     ]
 })
+
+const addLogger = (req, res, next) => {
+    req.logger = logger;
+    req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
+    next()
+}
+export default addLogger

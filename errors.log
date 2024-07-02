@@ -1,0 +1,4 @@
+{"level":"fatal","message":"Mensaje FATAL"}
+{"level":"error","message":"Mensaje ERROR"}
+{"level":"warning","message":"Mensaje WARNING"}
+{"level":"info","message":"Mensaje INFO"}
