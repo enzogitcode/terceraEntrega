@@ -1,7 +1,7 @@
 import CartModel from "../models/cart.model.js";
 import CartRepository from "../repository/cart.repository.js";
 const cartRepository = new CartRepository()
- class CartController {
+class CartController {
     async newCart(req, res) {
         try {
             const newCart = await cartRepository.createCart()
@@ -13,18 +13,36 @@ const cartRepository = new CartRepository()
         }
     }
     async addProducts(req, res) {
-        const productId = req.params.pid
-        const cartId = req.params.cid
-        const quantity = req.body.quantity || 1
-        try {
-            const product = await cartRepository.addProducts(productId, cartId, quantity)
-            res.json(product)
-        } catch (error) {
-            console.log(error)
-            res.json(error)
-        }
 
+        const productId = req.params.pid;
+
+        const cartId = req.params.cid;
+
+        const quantity = req.body.quantity || 1;
+
+        try {
+
+            const cart = await cartRepository.addProducts(
+
+                cartId,
+
+                productId,
+
+                quantity
+
+            );
+
+            res.json(cart);
+
+        } catch (error) {
+
+            console.log("Error en addProducts del controlador", error);
+
+            res.status(500).json({ error: error.message });
+
+        }
     }
+    
     async deleteProduct(req, res) {
         const cartId = req.params.cid
         const productId = req.params.pid
