@@ -61,14 +61,19 @@ class CartController {
             if (!cart) {
                 res.json("No existe un carrito con ese Id")
             }
-            res.json(cart)
+            //res.json(cart)
+            //res.redirect(`http://localhost:8080/api/carts/${cartId}`)
+            res.render('cartsContainer', {carts: cart})
+
         } catch (error) {
             console.log(error)
             res.json(error)
         }
     }
     async updateCart() { }
-    async updateQuantity() { }
+    async updateQuantity() {
+        
+     }
     async clearCart(req, res) {
         const cartId = req.params.cid
         try {

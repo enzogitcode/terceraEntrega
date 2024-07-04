@@ -7,8 +7,8 @@ const cartController = new CartController
 router.get("/:cid", cartController.getCartById)
 router.post("/", cartController.newCart)
 router.delete("/:cid", cartController.clearCart)
-//no funcionan
 router.post("/:cid/products/:pid", cartController.addProducts)
+//no funcionan
 router.delete("/:cid/products/:pid", cartController.deleteProduct)
 router.put("/:cid", cartController.updateCart)
 router.put("/:cid/products/:pid", cartController.updateQuantity)

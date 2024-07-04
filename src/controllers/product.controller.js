@@ -4,8 +4,19 @@ class ProductController {
     async getProducts(req, res) {
         try {
             const products = await productRepository.getProducts();
-            res.json(products);
-
+            //res.json(products)
+            res.render("index", {
+                payload: products,
+                products: products,
+                hasPrevPage: products.hasPrevPage,
+                hasNextPage: products.hasNextPage,
+                prevPage: products.prevPage,
+                nextPage: products.nextPage,
+                currentPage: products.page,
+                totalPages: products.totalPages,
+                prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
+                nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
+            })
         } catch (error) {
             res.json(error)
             console.log(error)
@@ -26,7 +37,7 @@ class ProductController {
         try {
             const product = await productRepository.addProduct(newProduct)
             res.json(product)
-            
+
         } catch (error) {
             res.json(error)
             console.log(error)

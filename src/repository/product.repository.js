@@ -3,12 +3,12 @@ import ProductModel from '../models/product.model.js'
 class ProductRepository {
     async getProducts() {
         try {
-            const products = await ProductModel.find()
-            const productsFinal = products.map(product => {
+            const products = await ProductModel.find().lean()
+             /* const productsFinal = products.map(product => {
                 const { _id, ...rest } = product.toObject();
                 return rest;
-            })
-            return productsFinal
+            }) */
+            return products
             
         } catch (error) {
             console.log(error)
@@ -16,7 +16,7 @@ class ProductRepository {
     }
     async getProductById(id) {
         try {
-            const product = await ProductModel.findById(id)
+            const product = await ProductModel.findById(id).lean()
             if (!product) {
                 console.log("Producto no encontrado")
                 return null
