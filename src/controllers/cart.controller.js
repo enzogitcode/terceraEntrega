@@ -42,7 +42,7 @@ class CartController {
 
         }
     }
-    
+
     async deleteProduct(req, res) {
         const cartId = req.params.cid
         const productId = req.params.pid
@@ -61,19 +61,36 @@ class CartController {
             if (!cart) {
                 res.json("No existe un carrito con ese Id")
             }
-            //res.json(cart)
+            res.json(cart)
+            //no funciona
             //res.redirect(`http://localhost:8080/api/carts/${cartId}`)
-            res.render('cartsContainer', {carts: cart})
+            //funciona
+            //res.render('cartsContainer', {carts: cart})
 
         } catch (error) {
             console.log(error)
             res.json(error)
         }
     }
-    async updateCart() { }
-    async updateQuantity() {
-        
-     }
+    async updateCart(req, res) {
+        const cartId = req.params.cid
+        try {
+            const cart = await cartRepository.updateCart(cartId)
+            res.json(cart)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async updateQuantity(req, res) {
+        const cartId = req.params.cid
+        const updatedProducts = req.body;
+        try {
+            const updatedCart = await cartRepository.updateProductQuantity(cartId, updatedProducts);
+            res.json(updatedCart);
+        } catch (error) {
+            console.log(error)
+        }
+    }
     async clearCart(req, res) {
         const cartId = req.params.cid
         try {

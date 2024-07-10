@@ -68,7 +68,7 @@ class CartRepository {
 
         }
     }
-    async updateCart(cartId) {
+    async updateCart(cartId, updatedProducts) {
         try {
             const cart = await CartModel.findById(cartId)
             if (!cart) {

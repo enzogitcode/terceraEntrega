@@ -4,8 +4,8 @@ class ProductController {
     async getProducts(req, res) {
         try {
             const products = await productRepository.getProducts();
-            //res.json(products)
-            res.render("index", {
+            res.json(products)
+            /* res.render("index", {
                 payload: products,
                 products: products,
                 hasPrevPage: products.hasPrevPage,
@@ -16,7 +16,7 @@ class ProductController {
                 totalPages: products.totalPages,
                 prevLink: products.hasPrevPage ? `/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
                 nextLink: products.hasNextPage ? `/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
-            })
+            }) */
         } catch (error) {
             res.json(error)
             console.log(error)
